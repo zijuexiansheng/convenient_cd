@@ -13,5 +13,5 @@ a convenient cd command
 
 # TODO
 
-- []: add zsh autocompletion
-- []: do more test
+- [ ]: add zsh autocompletion
+- [ ]: do more test
