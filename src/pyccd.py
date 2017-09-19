@@ -110,7 +110,7 @@ def handle_getpath(args):
     if path:
         print path[0]
     else:
-        print
+        print args.name
 
 def parse_args():
     parser = argparse.ArgumentParser(description = "ccd python engine")
