@@ -1,4 +1,3 @@
-#!/usr/bin/env zsh
 #autoload
 
 if [[ "$#" -eq "0" ]]; then
