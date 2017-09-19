@@ -1,1 +1,74 @@
 #compdef ccd
+
+function _ccd() {
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+    _arguments -C \
+            '--cmd[database cmd]:database cmd:->dbcmds'
+            ':subcmds:->subcmds' \
+            '*::options:->options'
+    case $state in
+        (dbcmds)
+            __do_dbcmds
+        ;;
+        (subcmds)
+            _arguments -C '1:name:'
+        ;;
+        (options)
+        ;;
+    esac
+}
+
+function __do_dbcmds() {
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+    _arguments -C \
+            '1:subcmds:->subcmds' \
+            '*::options:->options'
+    case $state in
+        (subcmds)
+            local -a subcommands
+            subcommands=('insert:Insert a new path'
+                         'delete:Delete one or more paths'
+                         'avail:List all available paths'
+                         'update:Update a path'
+                         'clear:Clear all the paths')
+            _describe -t subcommands "ccd --cmd" subcommands 
+        ;;
+        (options)
+            case $line[1] in
+                (insert)
+                    _argument -C '1:name:' \
+                                 '2:path:_path_files -/'
+                ;;
+                (delete)
+                    _argument -C '1:name:__list_all_nams'
+                ;;
+                (update)
+                    _argument -C '1:name:__list_all_names' \
+                                 '2:path:_path_files -/'
+                ;;
+                (clear|avail)
+                ;;
+                (*)
+                    _message "Ooops, unknown sub command"
+                ;;
+            esac
+        ;;
+    esac
+}
+
+function __safe_values() {
+    if [[ "$#" -gt "1" ]]; then
+        local tag
+        tag=$1
+        shift
+        _values ${tag} $@
+    fi
+}
+
+function __list_all_names() {
+    __safe_values 'Avail paths' $(_call_program name "python2 =>replace me<= avail 2> /dev/null")
+}
+
+_ccd "$@"

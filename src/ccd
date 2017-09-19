@@ -9,10 +9,11 @@ if [[ "$1" =~ '--?h.*' ]]; then
     echo "Usage: ccd <path_name> <extra_path> ..." >&2
     echo "   or: ccd --cmd <cmd_name>" >&2
     echo "    <cmd_name>:" >&2
-    echo "         * insert <path_name> <absolute path>: add a path"
-    echo "         * delete <path_name> ...:             delete one or more paths by name"
-    echo "         * avail:                              list available paths"
-    echo "         * clear:                              clear all paths"
+    echo "         * insert <path_name> <path>:     add a path"
+    echo "         * delete <path_name> ...:        delete one or more paths by name"
+    echo "         * update <path_name> <path>:     delete one or more paths by name"
+    echo "         * avail:                         list available paths"
+    echo "         * clear:                         clear all paths"
     return 0
 fi
 

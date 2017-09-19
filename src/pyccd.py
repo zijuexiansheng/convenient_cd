@@ -98,6 +98,11 @@ def handle_create(args):
     sql.create_table()
     sql.close()
 
+def handle_update(args):
+    sql = Sqlite()
+    sql.update_path(args.name, args.path)
+    sql.close()
+
 def handle_getpath(args):
     sql = Sqlite()
     path = sql.getpath(args.name)
@@ -123,6 +128,9 @@ def parse_args():
 
     parser_clear = subparsers.add_parser("clear", help="clear all the paths")
     parser_create = subparsers.add_parser("create", help="create database")
+    parser_update = subparsers.add_parser("update", help="update a path")
+    parser_update.add_argument("name", help="path name")
+    parser_update.add_argument("path", help="path")
 
     parser_getpath = subparsers.add_parser("getpath", help="get path by name")
     parser_getpath.add_argument("name", help="path name")
@@ -136,6 +144,7 @@ def main():
                    "avail":  handle_avail,
                    "clear": handle_clear,
                    "create": handle_create,
+                   "update": handle_update,
                    "getpath": handle_getpath}
     subcommands[ args.subcmd ]( args )
 
