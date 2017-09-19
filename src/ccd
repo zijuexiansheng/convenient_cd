@@ -29,7 +29,7 @@ else
     local cur_path="`python2 ${pyccd} getpath $1`"
     shift 1
     for each in "$@"; do
-        cur_path+="$/{each}"
+        cur_path+="/${each}"
     done
     cd ${cur_path} 2> /dev/null
     if [[ "$?" -ne "0" ]]; then
