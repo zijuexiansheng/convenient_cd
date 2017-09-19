@@ -1,0 +1,46 @@
+#!/usr/bin/env zsh
+#autoload
+
+if [[ "$#" -eq "0" ]]; then
+    cd ~
+    return 0
+fi
+
+if [[ "$1" =~ '--?h.*' ]]; then
+    echo "Usage: ccd <path_name> <extra_path> ..." >&2
+    echo "   or: ccd --cmd <cmd_name>" >&2
+    echo "    <cmd_name>:" >&2
+    echo "         * insert <path_name> <absolute path>: add a path"
+    echo "         * delete <path_name> ...:             delete one or more paths by name"
+    echo "         * avail:                              list available paths"
+    echo "         * clear:                              clear all paths"
+    return 0
+fi
+
+local pyccd="=>replace me<="
+if [[ "$1" == "--cmd" ]]; then
+    shift
+    python2 ${pyccd} "$@"
+else
+    if [[ "$1" =~ "-.*" ]]; then
+        echo "[ERROR]: <path_name> shouldn't begin with '-'"
+        return 1
+    fi
+    local ini_path=$1
+    shift
+    local cur_path="`python2 ${pyccd} getpath ${ini_path}`"
+    if [[ "x${cur_path}" = "x" ]]; then
+        cur_path="${ini_path}/"
+    else
+        cur_path+="/"
+    fi
+    for each in "$@"; do
+        cur_path+="${each}/"
+    done
+    cd ${cur_path} 2> /dev/null
+    if [[ "$?" -ne "0" ]]; then
+        echo "[ERROR]: no such file or directory: ${cur_path}" >&2
+    else
+        pwd
+    fi
+fi
