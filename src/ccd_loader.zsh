@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-autoload -Uz "=>replace me<=/bin/ccd"
-fpath=(=>replace me<=/libexec/completions/zsh $fpath)
+fpath=(=>replace me<=/libexec/completions/zsh =>replace me<=/bin $fpath)
+autoload -Uz ccd
 autoload -U compinit
 compinit
