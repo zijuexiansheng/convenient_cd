@@ -22,7 +22,7 @@ if [[ "$1" == "--cmd" ]]; then
     shift
     python2 ${pyccd} "$@"
 else
-    if [[ "$1" =~ "-.*" ]]; then
+    if [[ "$1" =~ '-.*' ]]; then
         echo "[ERROR]: <path_name> shouldn't begin with '-'"
         return 1
     fi
