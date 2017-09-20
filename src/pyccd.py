@@ -80,11 +80,10 @@ def handle_delete(args):
 
 def handle_avail(args):
     sql = Sqlite()
-    if args.name:
-        for each in sql.list_similar(args.name):
-            print "{}: {}".format(each[0], each[1])
-    else:
-        for each in sql.list_all():
+    for each in sql.list_all():
+        if args.name:
+            print "{}".format(each[0])
+        else:
             print "{}: {}".format(each[0], each[1])
     sql.close()
 
@@ -110,7 +109,7 @@ def handle_getpath(args):
     if path:
         print path[0]
     else:
-        print
+        print args.name
 
 def parse_args():
     parser = argparse.ArgumentParser(description = "ccd python engine")
@@ -124,7 +123,7 @@ def parse_args():
     parser_delete.add_argument("name", nargs='+', help="path name(s)")
 
     parser_avail = subparsers.add_parser("avail", help="list available path names")
-    parser_avail.add_argument("-n", "--name", help="get available similar path names")
+    parser_avail.add_argument("-n", "--name", action="store_true", help="get available similar path names")
 
     parser_clear = subparsers.add_parser("clear", help="clear all the paths")
     parser_create = subparsers.add_parser("create", help="create database")
