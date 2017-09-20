@@ -1,7 +1,7 @@
 #autoload
 
 if [[ "$#" -eq "0" ]]; then
-    cd ~
+    builtin cd ~
     return 0
 fi
 
@@ -26,21 +26,13 @@ else
         echo "[ERROR]: <path_name> shouldn't begin with '-'"
         return 1
     fi
-    local ini_path=$1
-    shift
-    local cur_path="`python2 ${pyccd} getpath ${ini_path}`"
-    if [[ "x${cur_path}" = "x" ]]; then
-        cur_path="${ini_path}/"
-    else
-        cur_path+="/"
-    fi
+    local cur_path="`python2 ${pyccd} getpath $1`"
+    shift 1
     for each in "$@"; do
-        cur_path+="${each}/"
+        cur_path+="/${each}"
     done
-    cd ${cur_path} 2> /dev/null
+    builtin cd ${cur_path} 2> /dev/null
     if [[ "$?" -ne "0" ]]; then
         echo "[ERROR]: no such file or directory: ${cur_path}" >&2
-    else
-        pwd
     fi
 fi
