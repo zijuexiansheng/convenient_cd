@@ -63,6 +63,12 @@ This will change the current working directory to `$HOME/lol/aaa/bbb`
 
 **Note** There is a `/` after `lol`
 
+### Example 4
+
+`ccd -`
+
+Change directory to the previous directory, just like `cd -`
+
 ---
 
 **Note**
