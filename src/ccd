@@ -5,7 +5,7 @@ if [[ "$#" -eq "0" ]]; then
     return 0
 fi
 
-if [[ "$1" =~ '--?h.*' ]]; then
+if [[ "$1" =~ '^--?h.*' ]]; then
     echo "Usage: ccd <path_name> <extra_path> ..." >&2
     echo "   or: ccd --cmd <cmd_name>" >&2
     echo "    <cmd_name>:" >&2
@@ -22,7 +22,7 @@ if [[ "$1" == "--cmd" ]]; then
     shift
     python2 ${pyccd} "$@"
 else
-    if [[ "$1" =~ '-.*' ]]; then
+    if [[ "$1" =~ '^-.*' ]]; then
         echo "[ERROR]: <path_name> shouldn't begin with '-'"
         return 1
     fi
