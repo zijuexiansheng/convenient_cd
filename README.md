@@ -10,7 +10,3 @@ a convenient cd command
 
 * `./install.sh <install path>`, or
 * `brew install zijuexiansheng/filbat/convenient_cd`
-
-# TODO
-
-- [ ] add zsh autocompletion
