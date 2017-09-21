@@ -4,29 +4,11 @@ function _ccd() {
     local curcontext="$curcontext" state line
     typeset -A opt_args
     _arguments -C \
-            '--cmd[database cmd]:database cmd:->dbcmds'
+            '--cmd[database cmd]:database cmd:->dbcmds' \
             ':subcmds:->subcmds' \
             '*::options:->options'
     case $state in
         (dbcmds)
-            __do_dbcmds
-        ;;
-        (subcmds)
-            _arguments -C '1:name:'
-        ;;
-        (options)
-        ;;
-    esac
-}
-
-function __do_dbcmds() {
-    local curcontext="$curcontext" state line
-    typeset -A opt_args
-    _arguments -C \
-            '1:subcmds:->subcmds' \
-            '*::options:->options'
-    case $state in
-        (subcmds)
             local -a subcommands
             subcommands=('insert:Insert a new path'
                          'delete:Delete one or more paths'
@@ -35,27 +17,54 @@ function __do_dbcmds() {
                          'clear:Clear all the paths')
             _describe -t subcommands "ccd --cmd" subcommands 
         ;;
-        (options)
-            case $line[1] in
-                (insert)
-                    _argument -C '1:name:' \
-                                 '2:path:_path_files -/'
-                ;;
-                (delete)
-                    _argument -C '1:name:__list_all_nams'
-                ;;
-                (update)
-                    _argument -C '1:name:__list_all_names' \
-                                 '2:path:_path_files -/'
+        (subcmds)
+            case $opt_args in
+                (insert|delete|update)
+                    __list_all_names
                 ;;
                 (clear|avail)
+                    _message "No more parameters"
                 ;;
                 (*)
-                    _message "Ooops, unknown sub command"
+                    __list_all_names
+                    _path_files -/
+                ;;
+            esac
+        ;;
+        (options)
+            case $opt_args in
+                (insert|update)
+                    _path_files -/
+                ;;
+                (clear|avail|delete)
+                    _message "This won't happen"
+                ;;
+                (*)
+                    __list_dirs ${#line} $line
                 ;;
             esac
         ;;
     esac
+}
+
+function __list_dirs(){
+    local nparams=$1
+    local ccd_path=$(_call_program ccd_path "python2 =>replace me<= getpath $2 2> /dev/null")
+    shift
+    shift
+    local i=1
+    for each_path in "$@"; do
+        if [[ "$i" -eq "$#" ]]; then
+            nparams=$((nparams - 2))
+            if [[ "$#" -eq "$nparams"  ]]; then
+                ccd_path+="/${each_path}"
+            fi
+            break
+        fi
+        i=$((i+1))
+        ccd_path+="/${each_path}"
+    done
+    _path_files -W ${ccd_path} -/
 }
 
 function __safe_values() {
@@ -68,7 +77,7 @@ function __safe_values() {
 }
 
 function __list_all_names() {
-    __safe_values 'Avail paths' $(_call_program name "python2 =>replace me<= avail 2> /dev/null")
+    __safe_values 'Avail names' $(_call_program name "python2 =>replace me<= avail --name 2> /dev/null")
 }
 
 _ccd "$@"
