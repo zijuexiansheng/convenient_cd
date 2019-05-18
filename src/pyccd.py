@@ -49,11 +49,11 @@ class Sqlite:
         self.commit()
 
     def list_all(self):
-        for each in self.cur.execute("select * from pyccd"):
+        for each in self.cur.execute("select * from pyccd order by name"):
             yield each
 
     def list_similar(self, partial):
-        for each in self.cur.execute("select * from pyccd where name like ?", ('%' + partial + '%', )):
+        for each in self.cur.execute("select * from pyccd where name like ? order by name", ('%' + partial + '%', )):
             yield each
     
     def getpath(self, name):
@@ -84,7 +84,7 @@ def handle_avail(args):
         if args.name:
             print "{}".format(each[0])
         else:
-            print "{}: {}".format(each[0], each[1])
+            print "{}:\t{}".format(each[0], each[1])
     sql.close()
 
 def handle_clear(args):
